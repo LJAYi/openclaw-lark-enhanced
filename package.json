@@ -1,6 +1,6 @@
 {
   "name": "openclaw-lark-enhanced",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
   "description": "Third-party, non-official OpenClaw Lark/Feishu enhancement plugin. Currently includes a thread/topic completion routing fix without modifying the official plugin.",
   "license": "MIT",

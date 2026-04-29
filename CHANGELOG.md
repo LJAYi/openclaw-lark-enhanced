@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.3
 
 - add CONTRIBUTING guide
 - add bug report / feature request / PR templates
