@@ -1,0 +1,10 @@
+{
+  "id": "lark-enhanced",
+  "name": "OpenClaw Lark Enhanced",
+  "description": "Third-party, non-official Lark/Feishu enhancement plugin for OpenClaw. Current feature: keep subagent completion in the originating Feishu thread/topic.",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  }
+}
