@@ -5,9 +5,16 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Tag to validate against package.json, e.g. v0.1.2'
+        required: true
 
 permissions:
   contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   publish:
@@ -15,12 +22,41 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ inputs.release_tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate package version matches tag
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          EXPECTED_TAG="v${PACKAGE_VERSION}"
+          ACTUAL_TAG="${{ steps.tag.outputs.tag }}"
+          echo "package.json version: ${PACKAGE_VERSION}"
+          echo "expected tag: ${EXPECTED_TAG}"
+          echo "actual tag: ${ACTUAL_TAG}"
+          test "${EXPECTED_TAG}" = "${ACTUAL_TAG}"
+
+      - name: Ensure tag exists for manual runs
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git rev-parse "${{ steps.tag.outputs.tag }}" >/dev/null 2>&1 || {
+            echo "Tag ${{ steps.tag.outputs.tag }} does not exist in the repository.";
+            exit 1;
+          }
 
       - name: Install dependencies
         run: npm install --package-lock-only --ignore-scripts
@@ -36,6 +72,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.tag.outputs.tag }}
           generate_release_notes: true
           files: |
             *.tgz

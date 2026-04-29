@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest an enhancement for openclaw-lark-enhanced
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What real Lark/Feishu workflow issue are you trying to fix?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed enhancement
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints / non-goals
+      description: Note anything that should stay non-invasive or clearly out of scope.

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- add CONTRIBUTING guide
+- add bug report / feature request / PR templates
+- harden release workflow with version-tag validation
+- opt GitHub Actions JavaScript actions into Node 24 runtime
+
 ## 0.1.2
 
 - add GitHub release automation workflow
